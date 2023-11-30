@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">EPP</string>
+    <string name="events">Events</string>
+    <string name="addEvent">Add Event</string>
+    <string name="back_button">back</string>
+    <string name="add_event_button">Add Event Button</string>
+    <string name="cancel">Cancel</string>
+    <string name="next">Next</string>
+    <string name="addPermissions">Add Permissions</string>
+</resources>
