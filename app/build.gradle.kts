@@ -72,4 +72,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("com.google.firebase:firebase-analytics")
     implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 }

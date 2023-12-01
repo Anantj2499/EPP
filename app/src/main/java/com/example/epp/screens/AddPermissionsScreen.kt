@@ -1,7 +1,9 @@
 package com.example.epp.screens
 
 import android.Manifest
+import android.content.Context
 import android.net.Uri
+import android.provider.OpenableColumns
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,8 +39,14 @@ fun AddPermissionsScreen(
     val context = LocalContext.current
     val permissionTitles = remember { mutableStateListOf("") }
     val permissionFiles = remember { mutableStateListOf<Uri>() }
+    val currentIndex = remember { mutableStateOf(0) }
     val pickPdf = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
-        uri?.let { permissionFiles.add(it) }
+        uri?.let {
+            if (permissionFiles.size>currentIndex.value)
+                permissionFiles[currentIndex.value] = it
+            else
+                permissionFiles.add(it)
+        }
     }
     val permissionRequest = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
         if (isGranted) {
@@ -56,6 +65,7 @@ fun AddPermissionsScreen(
             .padding(16.dp)) {
         LazyColumn {
             itemsIndexed(permissionTitles) { index, title ->
+                currentIndex.value = index
                 TextField(
                     value = title,
                     onValueChange = { permissionTitles[index] = it },
@@ -66,6 +76,9 @@ fun AddPermissionsScreen(
                     permissionRequest.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
                 }) {
                     Text("Upload Permission File")
+                }
+                if (index<permissionFiles.size){
+                    Text(getFileName(context, permissionFiles[index]))
                 }
             }
             item {
@@ -116,4 +129,28 @@ fun AddPermissionsScreen(
             }
         }
     }
+}
+fun getFileName(context: Context, uri: Uri): String {
+    var result: String? = null
+    if (uri.scheme == "content") {
+        val cursor = context.contentResolver.query(uri, null, null, null, null)
+        try {
+            if (cursor != null && cursor.moveToFirst()) {
+                val columnIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+                if (columnIndex != -1) {
+                    result = cursor.getString(columnIndex)
+                }
+            }
+        } finally {
+            cursor?.close()
+        }
+    }
+    if (result == null) {
+        result = uri.path
+        val cut = result?.lastIndexOf('/')
+        if (cut!=null&&cut != -1) {
+            result = result?.substring(cut+1)
+        }
+    }
+    return result ?: "Unknown file"
 }

@@ -199,7 +199,11 @@ fun DatePickerDialog(eventViewModel: EventViewModel) {
     }
 
     Button(onClick = { openDialog.value = true }) {
-        Text(if (isDateSet) selectedDate!!.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) else "Set Date")
+        Text(
+            if (isDateSet)
+                selectedDate!!.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM))
+            else "Set Date"
+        )
     }
 }
 
