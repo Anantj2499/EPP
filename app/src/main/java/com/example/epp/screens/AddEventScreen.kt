@@ -184,7 +184,7 @@ fun AddEventScreen(onCancelButtonClicked: () -> Unit = {}, onNexButtonClicked: (
 @Composable
 fun DatePickerDialog(eventViewModel: EventViewModel) {
     val openDialog = remember { mutableStateOf(false) }
-    var selectedDate = eventViewModel.selectedDate
+    val selectedDate = eventViewModel.selectedDate
     var isDateSet = eventViewModel.isDateSet
 
     if (openDialog.value) {
@@ -249,7 +249,7 @@ fun DatePicker(
 fun TimePickerDialog(eventViewModel: EventViewModel) {
     val openDialog = remember { mutableStateOf(false) }
 
-    var selectedTime = eventViewModel.selectedTime
+    val selectedTime = eventViewModel.selectedTime
     var isTimeSet = eventViewModel.isTimeSet
 
     if (openDialog.value) {

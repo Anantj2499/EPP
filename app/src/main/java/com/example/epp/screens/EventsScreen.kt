@@ -41,7 +41,9 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.epp.R
 import com.example.epp.models.Event
 @Composable
-fun EventsScreen(onAddEventClicked: () -> Unit) {
+fun EventsScreen(
+    onAddEventClicked: () -> Unit,
+    ) {
     Box(Modifier.fillMaxSize()){
         Column {
             ExpandableCard(title = "Upcoming Events") {
